@@ -37,7 +37,7 @@ def respond():
         {
           "text": {
             "text": [
-              query_result.get("queryText")
+              lastcontext.get("sheltername")
             ]
           }
         }
