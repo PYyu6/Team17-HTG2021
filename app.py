@@ -28,10 +28,10 @@ def respond():
     queryresult = req.get('queryResult')
     params = queryresult.get('parameters')
     response = "default"
-    if params["writeaction2"]:
+    if params["writeaction"]:
         response = post_rating(params["sheltername"], None, queryresult["queryText"])
     
-    fulfillment = {
+    return {
       "fulfillmentMessages": [
         {
           "text": {
@@ -43,7 +43,6 @@ def respond():
       ]
     }
     
-    return fulfillment
 def get_best_institution_of_type (institution_type):
     conn = sql.connect(
         host = "us-cdbr-east-03.cleardb.com",
