@@ -96,8 +96,8 @@ def post_rating(institution_raw, initiative_raw, rating):
     initiative = None
     if institution_raw:
         cursor.execute("SELECT id FROM institutions WHERE name = '%s'" %(institution_raw))
+        institution = cursor.fetchone()
         return "&"
-        institution = cursor.fetchone()[0]
     if initiative_raw:
         cursor.execute("SELECT id FROM initiatives WHERE name = '%s'" %(initiative_raw))
         initiative = cursor.fetchone()[0]
