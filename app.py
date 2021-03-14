@@ -25,7 +25,7 @@ def respond():
     req = request.get_json(force=True)
 
     # fetch action from json
-    action = req.get('queryResult').get('action')
+    action = req.get('queryResult').get('parameters')
     
     return {
       "fulfillmentMessages": [
