@@ -22,7 +22,8 @@ def sanitize_decimal(dtuple):
 
 @app.route('/webhook', methods=['POST'])
 def respond():
-    params = request.form.get("parameters")
+    queryresult = request.get("queryResult")
+    params = queryresult.get("parameters")
     return {
       "fulfillmentMessages": [
         {
