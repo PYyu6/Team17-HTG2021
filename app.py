@@ -97,10 +97,15 @@ def post_rating(institution_raw, initiative_raw, rating):
     if institution_raw:
         cursor.execute("SELECT id FROM institutions WHERE name = '%s'" %(institution_raw))
         institution = cursor.fetchone()
-        return str(institution)
+        if not institution:
+            return "Sorry, this institution or initiative does not exist in our system"
+        institution = institution[0]
     if initiative_raw:
         cursor.execute("SELECT id FROM initiatives WHERE name = '%s'" %(initiative_raw))
-        initiative = cursor.fetchone()[0]
+        initiative = cursor.fetchone()
+        if not initiative:
+            return "Sorry, this institution or initiative does not exist in our system"
+        initiative = initiative[0]
     # You can add the test cases you made in the previous function, but in our case here you are just testing the POST functionality
     if rating and (institution or initiative):
         if rating.isdigit() and int(rating) < 5:
