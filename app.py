@@ -106,29 +106,22 @@ def post_rating(institution_raw, initiative_raw, rating):
         if not initiative:
             return "Sorry, this institution or initiative does not exist in our system"
         initiative = initiative[0]
-    return "$"
     # You can add the test cases you made in the previous function, but in our case here you are just testing the POST functionality
     if rating and (institution or initiative):
         if rating.isdigit() and int(rating) < 5:
-            if initiative:
+            if institution:
                 query = "INSERT INTO ratings (institution_id, rating) VALUES (%s, %s)" %(institution, rating)
             else:
                 query = "INSERT INTO ratings (initiative_id, rating) VALUES (%s, %s)" %(initiative, rating)
         else:
-            if initiative:
+            if institution:
                 query = "INSERT INTO ratings (institution_id, review) VALUES (%s, '%s')" %(institution, rating)
             else:
                 query = "INSERT INTO ratings (initiative_id, review) VALUES (%s, '%s')" %(initiative, rating)
-              
-        print(query)
         cursor.execute(query)
         conn.commit();
-        cursor.close()
-        conn.close()
         return "Thanks for leaving a review"
     else:
-        cursor.close()
-        conn.close()
         return "Sorry, this institution or initiative does not exist in our system"
 
 
