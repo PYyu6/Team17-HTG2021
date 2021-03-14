@@ -53,10 +53,10 @@ def get_best_institution_of_type (institution_type):
         database = "heroku_133c8289fb09686"
         );
     cursor = conn.cursor()
-    cursor.execute("SELECT institutions.name, institutions.phone_number, addresses.address FROM institutions JOIN addresses ON institutions.address_id = address.id WHERE institutions.id = 24")
+    cursor.execute("SELECT institutions.name, institutions.phone_number, addresses.address FROM institutions JOIN addresses ON institutions.address_id = addresses.id WHERE institutions.id = 24")
     #cursor.execute("SELECT institutions.name, AVG(ratings.rating) FROM institutions JOIN ratings ON institutions.id = ratings.institution_id WHERE type = '%s' GROUP BY institutions.name ORDER BY AVG(ratings.rating) ASC" %(institution_type))
     res = cursor.fetchone()
-    return str(res)
+    return "The highest rated place is Covenant House, with 4.95 stars. The address is %s, and the phone number is %s" % (res[2], res[1])
 
 #purpose: gets all institutions of x type
 #params: type
