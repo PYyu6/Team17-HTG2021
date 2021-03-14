@@ -16,6 +16,13 @@ used Machine Learning to develop a chatbot on the SMS service in order to curate
 for homeless people across Canada. It is our hope that our app can get homeless people the help they need
 to escape the streets.
 
+Note: This is an MVP, not a finished product
+
+### Technologies:
+Twillio - SMS Support
+Dialogflow - Chatbot
+Heroku - Backend Hosting
+
 ### Contributors:
 * Julia Tu
 * Peiyu Yu
