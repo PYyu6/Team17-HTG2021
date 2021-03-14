@@ -18,8 +18,19 @@ def sanitize_decimal(dtuple):
 
 #purpose: gets best 3 institutions of x type
 #params: type
-@app.route('/get_best_institution_of_type/', methods=['GET'])
-def get_best_institution_of_type ():
+
+@app.route('/webhook', methods=['POST'])
+def respond():
+    # build a request object
+    req = request.get_json(force=True)
+
+    # fetch action from json
+    action = req.get('queryResult').get('action')
+
+    # return a fulfillment response
+    return {'fulfillmentText': 'This is a response from webhook.'}
+
+def get_best_institution_of_type (institution_type):
     conn = sql.connect(
         host = "us-cdbr-east-03.cleardb.com",
         user = "bc15a20e969c5b",
@@ -27,14 +38,12 @@ def get_best_institution_of_type ():
         database = "heroku_133c8289fb09686"
         );
     cursor = conn.cursor()
-    institution_type = request.args.get("type")
     cursor.execute("SELECT institutions.name, AVG(ratings.rating) FROM institutions JOIN ratings ON institutions.id = ratings.institution_id WHERE type = '%s' AND ratings.rating IS NOT NULL GROUP BY institutions.name ORDER BY AVG(ratings.rating)" %(institution_type))
     return jsonify(sanitize_decimal(cursor.fetchone()))
 
 #purpose: gets all institutions of x type
 #params: type
-@app.route('/get_institutions_of_type/', methods=['GET'])
-def get_institutions_of_type():
+def get_institutions_of_type(institution_type):
     conn = sql.connect(
         host = "us-cdbr-east-03.cleardb.com",
         user = "bc15a20e969c5b",
@@ -42,14 +51,12 @@ def get_institutions_of_type():
         database = "heroku_133c8289fb09686"
         );
     cursor = conn.cursor()
-    institution_type = request.args.get("type")
     cursor.execute("SELECT * FROM institutions WHERE type = '%s'" %(institution_type))
     return jsonify(cursor.fetchone())
 
 #purpose: gets institution info based on name
 #params: name
-@app.route('/get_institution/', methods=['GET'])
-def get_institution():
+def get_institution(institution):
     conn = sql.connect(
         host = "us-cdbr-east-03.cleardb.com",
         user = "bc15a20e969c5b",
@@ -58,14 +65,12 @@ def get_institution():
         );
     cursor = conn.cursor()
     
-    institution = request.args.get("institution")
     cursor.execute("SELECT * FROM institutions WHERE name = '%s'" %(institution))
     return jsonify(cursor.fetchone())
 
 #purpose: gives an institution a rating, or an initiative a rating, initiative takes priority
 #params: rating, institution, initiative
-@app.route('/post_rating/', methods=['GET'])
-def post_rating():
+def post_rating(institution_raw, initiative_raw, rating):
     conn = sql.connect(
         host = "us-cdbr-east-03.cleardb.com",
         user = "bc15a20e969c5b",
@@ -74,8 +79,6 @@ def post_rating():
         );
     cursor = conn.cursor()
     
-    institution_raw = request.args.get('institution')
-    initiative_raw = request.args.get('initiative')
     institution = None
     initiative = None
     
@@ -86,7 +89,6 @@ def post_rating():
         cursor.execute("SELECT id FROM initiatives WHERE name = '%s'" %(initiative_raw))
         initiative = cursor.fetchone()[0]
     
-    rating = request.args.get('rating')
     # You can add the test cases you made in the previous function, but in our case here you are just testing the POST functionality
     if rating and (institution or initiative):
         if rating.isdigit() and int(rating) < 5:
@@ -106,7 +108,7 @@ def post_rating():
         return jsonify(success=True)
     else:
         return jsonify({
-            "ERROR": "missing crucial variable"
+            "ERROR": "Sorry, this institution or initiative does not exist in our system"
         })
 
 # A welcome message to test our server
@@ -114,8 +116,7 @@ def post_rating():
 def index():
     return "<h1>Welcome to our server !!</h1>"
 
-@app.route('/get_rating/', methods=['GET'])
-def get_rating():
+def get_rating(institution_raw, initiative_raw, rating_type):
     conn = sql.connect(
         host = "us-cdbr-east-03.cleardb.com",
         user = "bc15a20e969c5b",
@@ -124,13 +125,9 @@ def get_rating():
         );
     cursor = conn.cursor()
     
-    institution_raw = request.args.get('institution')
-    initiative_raw = request.args.get('initiative')
     institution = None
     initiative = None
     res = None
-    
-    rating_type = request.args.get('rating_type')
     
     if not rating_type:
         return jsonify({
@@ -148,7 +145,7 @@ def get_rating():
                 return jsonify(sanitize_decimal(res))
             else:
                 return jsonify({
-                    "ERROR": "none found"
+                    "ERROR": "Sorry, this institution or initiative does not exist in our system"
                 })
         else:
             cursor.execute("SELECT review FROM ratings WHERE institution_id = %s AND review IS NOT NULL ORDER BY id DESC LIMIT 3" %(institution))
@@ -157,7 +154,7 @@ def get_rating():
                 return jsonify(sanitize_decimal(res))
             else:
                 return jsonify({
-                    "ERROR": "none found"
+                    "ERROR": "Sorry, this institution or initiative does not exist in our system"
                 })
     elif initiative_raw:
         cursor.execute("SELECT id FROM initiatives WHERE name = '%s'" %(initiative_raw))
@@ -168,7 +165,7 @@ def get_rating():
                 return jsonify(sanitize_decimal(res))
             else:
                 return jsonify({
-                    "ERROR": "none found"
+                    "ERROR": "Sorry, this institution or initiative does not exist in our system"
                 })
         else:
             cursor.execute("SELECT review FROM ratings WHERE initiative_id = %s AND review IS NOT NULL ORDER BY id DESC LIMIT 3" %(initiative))
@@ -177,11 +174,11 @@ def get_rating():
                 return jsonify(sanitize_decimal(res))
             else:
                 return jsonify({
-                    "ERROR": "none found"
+                    "ERROR": "Sorry, this institution or initiative does not exist in our system"
                 })
     else:
         return jsonify({
-            "ERROR": "missing variable institution or initiative"
+            "ERROR": "Sorry, this institution or initiative does not exist in our system"
         })
     
     
