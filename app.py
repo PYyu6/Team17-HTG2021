@@ -25,12 +25,15 @@ def respond():
     req = request.get_json(silent=True, force=True)
     query_result = req.get('queryResult')
     params = query_result.get("parameters")
+    lastcontext = query_result.get('outputContexts')[0].get("parameters")
+    
+    
     return {
       "fulfillmentMessages": [
         {
           "text": {
             "text": [
-              str(query_result.get('outputContexts')[0])
+              str(params)
             ]
           }
         }
