@@ -26,14 +26,17 @@ def respond():
     query_result = req.get('queryResult')
     params = query_result.get("parameters")
     lastcontext = query_result.get('outputContexts')[0].get("parameters")
+    response = ""
     
+    if (query_result.get("action") == "writeShelter.writeShelter-fallback"):
+        response = post_rating(lastcontext.get("sheltername"), None, query_result.get("queryText"));
     
     return {
       "fulfillmentMessages": [
         {
           "text": {
             "text": [
-              str(params)
+              response
             ]
           }
         }
