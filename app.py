@@ -29,8 +29,8 @@ def respond():
     response = "asd"
     
     if (query_result.get("action") == "writeShelter.writeShelter-fallback"):
-        pass;
-        #response = post_rating(lastcontext.get("sheltername"), None, query_result.get("queryText"));
+        response = post_rating(lastcontext.get("sheltername"), None, query_result.get("queryText"));
+        print(response)
     
     return {
       "fulfillmentMessages": [
