@@ -30,14 +30,15 @@ def respond():
     
     if (query_result.get("action") == "writeShelter.writeShelter-fallback"):
         response = post_rating(lastcontext.get("sheltername"), None, query_result.get("queryText"));
-    
+    if (params["activityname"] == "emergency contact"):
+        response = get_institutions_of_type("emergency")
     
     return {
       "fulfillmentMessages": [
         {
           "text": {
             "text": [
-              query_result.get("action")
+              response
             ]
           }
         }
@@ -66,7 +67,11 @@ def get_institutions_of_type(institution_type):
         );
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM institutions WHERE type = '%s'" %(institution_type))
-    return jsonify(cursor.fetchone())
+    res = cursor.fetchone()
+    if res:
+        return res
+    else:
+       "Sorry, we couldn't find that institution type"
 
 #purpose: gets institution info based on name
 #params: name
