@@ -24,6 +24,7 @@ def sanitize_decimal(dtuple):
 def respond():
     req = request.get_json(silent=True, force=True)
     query_result = req.get('queryResult')
+    output_params = query_result.get("outputContexts").get("parameters")
     params = query_result.get("parameters")
     return {
       "fulfillmentMessages": [
