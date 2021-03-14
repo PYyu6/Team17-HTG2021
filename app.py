@@ -25,14 +25,31 @@ def respond():
     req = request.get_json(force=True)
 
     # fetch action from json
-    action = req.get('queryResult').get('parameters')
+    queryresult = req.get('queryResult')
+    params = queryresult.get('parameters')
+    response = ""
+    if params["writeaction"]:
+        return {
+          "followupEventInput": {
+            "name": "writeaction2",
+            "languageCode": "en-US",
+            "parameters": {
+              "writeaction2": "yes",
+              "sheltername": params["sheltername"],
+              "address": params["address"]
+            }
+          }
+        }
+    
+    if params["writeaction2"]:
+        response = post_rating(params["sheltername"], None, queryresult["queryText"])
     
     return {
       "fulfillmentMessages": [
         {
           "text": {
             "text": [
-              str(action)
+              response
             ]
           }
         }
@@ -113,11 +130,9 @@ def post_rating(institution_raw, initiative_raw, rating):
         print(query)
         cursor.execute(query)
         conn.commit();
-        return jsonify(success=True)
+        return "Sorry, this institution or initiative does not exist in our system"
     else:
-        return jsonify({
-            "ERROR": "Sorry, this institution or initiative does not exist in our system"
-        })
+        return "Sorry, this institution or initiative does not exist in our system"
 
 # A welcome message to test our server
 @app.route('/')
