@@ -5,6 +5,7 @@ Created on Mar 13, 2021
 '''
 import decimal
 import pymysql as sql
+import make_response
 from flask import Flask, request, jsonify
 app = Flask(__name__)
 
@@ -19,16 +20,18 @@ def sanitize_decimal(dtuple):
 #purpose: gets best 3 institutions of x type
 #params: type
 
-@app.route('/webhook', methods=['POST'])
-def respond():
-    # build a request object
+def results():
     req = request.get_json(force=True)
 
     # fetch action from json
     action = req.get('queryResult').get('action')
+    params = req.get('queryResult').get('parameters')
+    
+    return {'fulfillmentText': "asdsdsdasdasd"}
 
-    # return a fulfillment response
-    return {'fulfillmentText': 'This is a response from webhook.'}
+@app.route('/webhook', methods=['POST'])
+def respond():
+    return make_response(jsonify(results()))
 
 def get_best_institution_of_type (institution_type):
     conn = sql.connect(
