@@ -44,7 +44,7 @@ def respond():
     if params["writeaction2"]:
         response = post_rating(params["sheltername"], None, queryresult["queryText"])
     
-    return {
+    fulfillment = {
       "fulfillmentMessages": [
         {
           "text": {
@@ -55,6 +55,8 @@ def respond():
         }
       ]
     }
+    
+    return fulfillment
 def get_best_institution_of_type (institution_type):
     conn = sql.connect(
         host = "us-cdbr-east-03.cleardb.com",
