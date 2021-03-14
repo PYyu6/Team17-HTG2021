@@ -30,8 +30,8 @@ def respond():
     
     if (query_result.get("action") == "writeShelter.writeShelter-fallback"):
         response = post_rating(lastcontext.get("sheltername"), None, query_result.get("queryText"));
-    if (params["activityname"] == "emergency contact"):
-        response = get_institutions_of_type("emergency")
+    if (params["bestshelter"]):
+        response = get_best_institution_of_type("shelter")
     
     return {
       "fulfillmentMessages": [
@@ -75,7 +75,7 @@ def get_institutions_of_type(institution_type):
     if res:
         return str(res)
     else:
-       "Sorry, we couldn't find that institution type"
+        "Sorry, we couldn't find that institution type"
 
 #purpose: gets institution info based on name
 #params: name
