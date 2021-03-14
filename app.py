@@ -27,20 +27,7 @@ def respond():
     # fetch action from json
     queryresult = req.get('queryResult')
     params = queryresult.get('parameters')
-    response = ""
-    if params["writeaction"]:
-        return {
-          "followupEventInput": {
-            "name": "writeaction2",
-            "languageCode": "en-US",
-            "parameters": {
-              "writeaction2": "yes",
-              "sheltername": params["sheltername"],
-              "address": params["address"]
-            }
-          }
-        }
-    
+    response = "default"
     if params["writeaction2"]:
         response = post_rating(params["sheltername"], None, queryresult["queryText"])
     
@@ -132,7 +119,7 @@ def post_rating(institution_raw, initiative_raw, rating):
         print(query)
         cursor.execute(query)
         conn.commit();
-        return "Sorry, this institution or initiative does not exist in our system"
+        return "Thanks for leaving a review"
     else:
         return "Sorry, this institution or initiative does not exist in our system"
 
