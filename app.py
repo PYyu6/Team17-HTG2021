@@ -53,7 +53,7 @@ def get_best_institution_of_type (institution_type):
         database = "heroku_133c8289fb09686"
         );
     cursor = conn.cursor()
-    cursor.execute("SELECT institutions.name, AVG(ratings.rating) FROM institutions JOIN ratings ON institutions.id = ratings.institution_id WHERE type = '%s' AND ratings.rating IS NOT NULL GROUP BY institutions.name ORDER BY AVG(ratings.rating)" %(institution_type))
+    cursor.execute("SELECT institutions.name, AVG(ratings.rating) FROM institutions JOIN ratings ON institutions.id = ratings.institution_id WHERE type = '%s'" %(institution_type))
     res = cursor.fetchone()
     return str(res)
 
