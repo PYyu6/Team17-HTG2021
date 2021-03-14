@@ -30,7 +30,7 @@ def respond():
         {
           "text": {
             "text": [
-              str(query_result.get('outputContexts'))
+              str(query_result.get('outputContexts')[0])
             ]
           }
         }
