@@ -31,12 +31,13 @@ def respond():
     if (query_result.get("action") == "writeShelter.writeShelter-fallback"):
         response = post_rating(lastcontext.get("sheltername"), None, query_result.get("queryText"));
     
+    
     return {
       "fulfillmentMessages": [
         {
           "text": {
             "text": [
-              response
+              query_result.get("action")
             ]
           }
         }
