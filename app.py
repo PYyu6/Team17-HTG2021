@@ -30,7 +30,7 @@ def respond():
         {
           "text": {
             "text": [
-              query_result
+              str(params)
             ]
           }
         }
