@@ -20,19 +20,19 @@ def sanitize_decimal(dtuple):
 #purpose: gets best 3 institutions of x type
 #params: type
 
-def results():
-    req = request.get_json(force=True)
-
-    # fetch action from json
-    action = req.get('queryResult').get('action')
-    params = req.get('queryResult').get('parameters')
-    
-    return {'fulfillmentText': "action"}
-
 @app.route('/webhook', methods=['POST'])
 def respond():
-    return make_response(jsonify(results()))
-
+    return {
+      "fulfillmentMessages": [
+        {
+          "text": {
+            "text": [
+              "Text response from webhook"
+            ]
+          }
+        }
+      ]
+    }
 def get_best_institution_of_type (institution_type):
     conn = sql.connect(
         host = "us-cdbr-east-03.cleardb.com",
