@@ -69,7 +69,7 @@ def get_institutions_of_type(institution_type):
     cursor.execute("SELECT * FROM institutions WHERE type = '%s'" %(institution_type))
     res = cursor.fetchone()
     if res:
-        return res
+        return str(res)
     else:
        "Sorry, we couldn't find that institution type"
 
