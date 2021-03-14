@@ -84,6 +84,7 @@ def get_institution(institution):
 #purpose: gives an institution a rating, or an initiative a rating, initiative takes priority
 #params: rating, institution, initiative
 def post_rating(institution_raw, initiative_raw, rating):
+    return "&"
     conn = sql.connect(
         host = "us-cdbr-east-03.cleardb.com",
         user = "bc15a20e969c5b",
@@ -101,7 +102,6 @@ def post_rating(institution_raw, initiative_raw, rating):
     if initiative_raw:
         cursor.execute("SELECT id FROM initiatives WHERE name = '%s'" %(initiative_raw))
         initiative = cursor.fetchone()[0]
-    return "$"
     # You can add the test cases you made in the previous function, but in our case here you are just testing the POST functionality
     if rating and (institution or initiative):
         if rating.isdigit() and int(rating) < 5:
