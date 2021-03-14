@@ -84,7 +84,6 @@ def get_institution(institution):
 #purpose: gives an institution a rating, or an initiative a rating, initiative takes priority
 #params: rating, institution, initiative
 def post_rating(institution_raw, initiative_raw, rating):
-    return "&"
     conn = sql.connect(
         host = "us-cdbr-east-03.cleardb.com",
         user = "bc15a20e969c5b",
@@ -95,7 +94,7 @@ def post_rating(institution_raw, initiative_raw, rating):
     
     institution = None
     initiative = None
-    
+    return "&"
     if institution_raw:
         cursor.execute("SELECT id FROM institutions WHERE name = '%s'" %(institution_raw))
         institution = cursor.fetchone()[0]
