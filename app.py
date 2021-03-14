@@ -54,7 +54,11 @@ def get_best_institution_of_type (institution_type):
         );
     cursor = conn.cursor()
     cursor.execute("SELECT institutions.name, AVG(ratings.rating) FROM institutions JOIN ratings ON institutions.id = ratings.institution_id WHERE type = '%s' AND ratings.rating IS NOT NULL GROUP BY institutions.name ORDER BY AVG(ratings.rating)" %(institution_type))
-    return jsonify(sanitize_decimal(cursor.fetchone()))
+    res = cursor.fetchone()
+    if not res:
+        return "Sorry, we couldn't find that institution type"
+    else:
+        return str(res)
 
 #purpose: gets all institutions of x type
 #params: type
